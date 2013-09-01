@@ -1,4 +1,4 @@
 JText
 =====
 
-JText a Simple Text Editor
+JText a Simple Text Editor I made
