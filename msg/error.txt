@@ -1,0 +1,2 @@
+These problems will not effect the app runing
+However will cause the app to look ugly
