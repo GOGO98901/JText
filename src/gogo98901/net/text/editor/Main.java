@@ -31,6 +31,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		running = true;
+		System.out.println("Starting "+title);
 		System.out.println("Operrating System : " + systemName + "| Version : " + systemversion);
 		Images();
 		if(errorT){
