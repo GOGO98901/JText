@@ -185,6 +185,25 @@ public class Form extends JFrame {
 				StringSelection stringSelction = new StringSelection(ClipBoardData);
 				Clipboard clipBoard = Toolkit.getDefaultToolkit().getSystemClipboard();
 				clipBoard.setContents(stringSelction, null);
+				textArea.replaceSelection("");
+			}
+		});
+		mntmCopy.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				ClipBoardData = textArea.getSelectedText();
+				StringSelection stringSelction = new StringSelection(ClipBoardData);
+				Clipboard clipBoard = Toolkit.getDefaultToolkit().getSystemClipboard();
+				clipBoard.setContents(stringSelction, null);
+			}
+		});
+		mntmPaste.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				textArea.append(ClipBoardData);
+			}
+		});
+		mntmDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				textArea.replaceSelection("");
 			}
 		});
 		mntmAboutJtext.addActionListener(new ActionListener() {
