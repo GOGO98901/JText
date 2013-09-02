@@ -1,5 +1,7 @@
 package gogo98901.net.text.editor;
 
+import gogo98901.net.text.editor.open.Console;
+
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -25,6 +27,8 @@ public class Main implements WindowListener {
 	public static String DeleteImage = "res/delete.png";
 	public static String InternetImage = "res/net.png";
 	public static String HelpImage = "res/help.gif";
+	public static String ConsoleImage = "res/console.png";
+	public static String ConsoleIconImage = "res/consoleIcon.png";
 	public static String errorI = "There are no current errors";
 	public static String systemName = System.getProperty("os.name");
 	public static String systemversion = System.getProperty("os.version");
@@ -40,20 +44,28 @@ public class Main implements WindowListener {
 	static File cut = new File(CutImage);
 	static File copy = new File(CopyImage);
 	static File paste = new File(PasteImage);
+	static File selectAll = new File(SelectAllImage);
 	static File delete = new File(DeleteImage);
 	static File help = new File(HelpImage);
 	static File internet = new File(InternetImage);
+	static File consoleI = new File(ConsoleImage);
+	static File consoleIcon = new File(ConsoleIconImage);
 
 	static ImageIcon newIcon = new ImageIcon(NewImage);
 
 	public static boolean running = false;
 	public static boolean errorT = false;
 
+	public static String consoleText = "\n";
+	
 	public static void main(String[] args) {
 		running = true;
 		System.out.println("Starting " + title);
+		consoleText += "Starting " + title + "\n";
 		System.out.println("Operrating System : " + systemName + "| Version : "
 				+ systemversion);
+		consoleText += "Operrating System : " + systemName + "| Version : "
+				+ systemversion + "\n";
 		Images();
 		if (errorT) {
 			JOptionPane
@@ -136,7 +148,7 @@ public class Main implements WindowListener {
 			errorI = PasteImage;
 			error();
 		}
-		File selectAll = new File(SelectAllImage);
+		
 		if (!selectAll.exists()) {
 			errorI = SelectAllImage;
 			error();
@@ -156,6 +168,14 @@ public class Main implements WindowListener {
 			errorI = InternetImage;
 			error();
 		}
+		if (!consoleI.exists()) {
+			errorI = ConsoleImage;
+			error();
+		}
+		if (!consoleIcon.exists()) {
+			errorI = ConsoleIconImage;
+			error();
+		}
 	}
 
 	public static void error() {
@@ -163,11 +183,15 @@ public class Main implements WindowListener {
 			JOptionPane.showMessageDialog(null, "Error\nCan't Find Image '"
 					+ errorI + "'", "Error", 0);
 			System.out.println("Error\nCan't Find Image '" + errorI + "'");
+			consoleText += "Error\nCan't Find Image '" + errorI + "'" + "\n";
 			errorT = true;
 			errorI = "There are no current errors";
 		} else {
 			JOptionPane.showMessageDialog(null, errorI, "There are no Errors",
 					0);
+			System.out.println("There are no current errors");
+			consoleText += "There are no current errors" + "\n";
+			
 
 		}
 	}
@@ -178,7 +202,8 @@ public class Main implements WindowListener {
 				JOptionPane.QUESTION_MESSAGE);
 		if (result == JOptionPane.YES_OPTION) {
 			System.out.println("Exiting");
-			System.exit(0);
+			consoleText += "Exiting" + "\n";
+			System.exit(3);
 		}
 	}
 
@@ -193,34 +218,16 @@ public class Main implements WindowListener {
 	public void windowClosing(WindowEvent e) {
 		exit();
 	}
-
 	@Override
-	public void windowActivated(WindowEvent e) {
-		
-	}
-
+	public void windowActivated(WindowEvent e) {}
 	@Override
-	public void windowClosed(WindowEvent e) {
-		
-	}
-
+	public void windowClosed(WindowEvent e) {}
 	@Override
-	public void windowDeactivated(WindowEvent e) {
-		
-	}
-
+	public void windowDeactivated(WindowEvent e) {}
 	@Override
-	public void windowDeiconified(WindowEvent e) {
-		
-	}
-
+	public void windowDeiconified(WindowEvent e) {}
 	@Override
-	public void windowIconified(WindowEvent e) {
-		
-	}
-
+	public void windowIconified(WindowEvent e) {}
 	@Override
-	public void windowOpened(WindowEvent e) {
-		
-	}
+	public void windowOpened(WindowEvent e) {}
 }

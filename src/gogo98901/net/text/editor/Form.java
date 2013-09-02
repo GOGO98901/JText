@@ -1,5 +1,7 @@
 package gogo98901.net.text.editor;
 
+import gogo98901.net.text.editor.open.Console;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -14,9 +16,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.IOException;
-import java.awt.event.*;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -32,8 +34,12 @@ import javax.swing.UIManager;
 import javax.swing.border.BevelBorder;
 import javax.swing.JProgressBar;
 import javax.swing.Box;
+import javax.swing.JScrollBar;
+import java.awt.Scrollbar;
+import javax.swing.JScrollPane;
+import java.awt.Cursor;
 
-public class Form extends JFrame {
+public class Form extends JFrame implements WindowListener{
 	private static final long serialVersionUID = 1L;
 
 	public static String ClipBoardData = "";
@@ -48,6 +54,7 @@ public class Form extends JFrame {
 			EventQueue.invokeLater(new Runnable() {
 				public void run() {
 					System.out.println("Running...");
+					Main.consoleText += "Running..." + "\n";
 				}
 			});
 		} else {
@@ -59,7 +66,7 @@ public class Form extends JFrame {
 	                   JOptionPane.PLAIN_MESSAGE,
 	                   JOptionPane.QUESTION_MESSAGE,
 	                   UIManager.getIcon("OptionPane.errorIcon"), null, null);
-			System.exit(0);
+			System.exit(3);
 		}
 	}
 
@@ -86,6 +93,7 @@ public class Form extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Main.newPage();
 				System.out.println("Starting New");
+				Main.consoleText += "Starting New" + "\n";
 			}
 		});
 		mntmNew.setFont(new Font("Arial", Font.PLAIN, 13));
@@ -190,6 +198,17 @@ public class Form extends JFrame {
 			}
 		});
 		mnView.add(mntmErrors);
+		
+		JMenuItem mntmConsole = new JMenuItem("Console");
+		mntmConsole.setIcon(new ImageIcon(Main.ConsoleIconImage));
+		mntmConsole.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Console.main(null);
+				Main.consoleText += "Opening Console" + "\n";
+			}
+		});
+		mnView.add(mntmConsole);
+		
 		JMenu mnHelp = new JMenu("Help");
 		mnHelp.setFont(new Font("Arial", Font.PLAIN, 13));
 		menuBar.add(mnHelp);
@@ -215,9 +234,14 @@ public class Form extends JFrame {
 		setContentPane(contentPane);
 		setLocationRelativeTo(null);
 		final JTextArea textArea = new JTextArea();
+		textArea.setWrapStyleWord(true);
+		textArea.setToolTipText("Type here");
 		contentPane.add(textArea, BorderLayout.CENTER);
 		textArea.setFont(UIManager.getFont("ToolTip.font"));
-
+		
+		JScrollPane scrollPane = new JScrollPane();
+		contentPane.add(scrollPane, BorderLayout.CENTER);
+		scrollPane.setViewportView(textArea);
 		mntmCut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				ClipBoardData = textArea.getSelectedText();
@@ -257,6 +281,8 @@ public class Form extends JFrame {
 		mntmAboutJtext.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				String htmlFilePath = "cfg/JText.html";
+				Main.consoleText += "Opening '" + htmlFilePath + "'" + "\n";
+				System.out.println("Opening '" + htmlFilePath + "'");
 				File htmlFile = new File(htmlFilePath);
 				try {
 					Desktop.getDesktop().browse(htmlFile.toURI());
@@ -289,26 +315,47 @@ public class Form extends JFrame {
 					mntmWordWrap.setIcon(new ImageIcon(Main.CrossImage));
 					wrap.delete();
 					System.out.println("Word Wrap Disabled");
+					Main.consoleText += "Word Wrap Disabled" + "\n";
 				} else {
-					textArea.setLineWrap(false);
+					textArea.setLineWrap(true);
 					mntmWordWrap.setIcon(new ImageIcon(Main.TickImage));
 					try {
 						wrap.createNewFile();
 					} catch (IOException e1) {
 					}
 					System.out.println("Word Wrap Enabled");
+					Main.consoleText += "Word Wrap Enabled" + "\n";
 				}
 			}
 		});
 		if (wrap.exists()) {
 			textArea.setLineWrap(true);
 			mntmWordWrap.setIcon(new ImageIcon(Main.TickImage));
+			Main.consoleText += "Word Wrap is Enabled" + "\n";
 			System.out.println("Word Wrap is Enabled");
 		} else {
 			textArea.setLineWrap(false);
 			mntmWordWrap.setIcon(new ImageIcon(Main.CrossImage));
+			Main.consoleText += "Word Wrap is Disabled" + "\n";
 			System.out.println("Word Wrap is Disabled");
 		}
 	}
+
+	@Override
+	public void windowActivated(WindowEvent e) {}
+	@Override
+	public void windowClosed(WindowEvent e) {}
+	@Override
+	public void windowClosing(WindowEvent e) {
+		Main.exit();
+	}
+	@Override
+	public void windowDeactivated(WindowEvent e) {}
+	@Override
+	public void windowDeiconified(WindowEvent e) {}
+	@Override
+	public void windowIconified(WindowEvent e) {}
+	@Override
+	public void windowOpened(WindowEvent e) {}
 
 }
