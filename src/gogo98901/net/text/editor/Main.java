@@ -2,6 +2,9 @@ package gogo98901.net.text.editor;
 
 import java.awt.Toolkit;
 import java.io.File;
+
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
@@ -25,7 +28,24 @@ public class Main {
 	public static String errorI = "There are no current errors";
 	public static String systemName = System.getProperty("os.name");
 	public static String systemversion = System.getProperty("os.version");
-
+	
+	static File icon = new File(IconImage);
+	static File cross = new File(CrossImage);
+	static File newI = new File(NewImage);
+	static File open = new File(OpenImage);
+	static File quit = new File(QuitImage);
+	static File save = new File(SaveImage);
+	static File saveAs = new File(SaveAsImage);
+	static File tick = new File(TickImage);
+	static File cut = new File(CutImage);
+	static File copy = new File(CopyImage);
+	static File paste = new File(PasteImage);
+	static File delete = new File(DeleteImage);
+	static File help = new File(HelpImage);
+	static File internet = new File(InternetImage);
+	
+	static ImageIcon newIcon = new ImageIcon(NewImage);
+	
 	public static boolean running = false;
 	public static boolean errorT = false;
 
@@ -45,57 +65,57 @@ public class Main {
 	}
 
 	public static void Images() {
-		File icon = new File(IconImage);
+		
 		if (!icon.exists()) {
 			errorI = IconImage;
 			error();
 		}
-		File cross = new File(CrossImage);
+		
 		if (!cross.exists()) {
 			errorI = CrossImage;
 			error();
 		}
-		File newI = new File(NewImage);
+		
 		if (!newI.exists()) {
 			errorI = NewImage;
 			error();
 		}
-		File open = new File(OpenImage);
+		
 		if (!open.exists()) {
 			errorI = OpenImage;
 			error();
 		}
-		File quit = new File(QuitImage);
+		
 		if (!quit.exists()) {
 			errorI = QuitImage;
 			error();
 		}
-		File save = new File(SaveImage);
+		
 		if (!save.exists()) {
 			errorI = SaveImage;
 			error();
 		}
-		File saveAs = new File(SaveAsImage);
+		
 		if (!saveAs.exists()) {
 			errorI = SaveAsImage;
 			error();
 		}
-		File tick = new File(TickImage);
+		
 		if (!tick.exists()) {
 			errorI = TickImage;
 			error();
 		}
-		File cut = new File(CutImage);
+		
 		if (!cut.exists()) {
 			errorI = CutImage;
 			error();
 		}
-		File copy = new File(CopyImage);
+		
 		if (!copy.exists()) {
 			errorI = CopyImage;
 			error();
 		}
-		File paste = new File(PasteImage);
+		
 		if (!paste.exists()) {
 			errorI = PasteImage;
 			error();
@@ -105,17 +125,17 @@ public class Main {
 			errorI = SelectAllImage;
 			error();
 		}
-		File delete = new File(DeleteImage);
+
 		if (!delete.exists()) {
 			errorI = DeleteImage;
 			error();
 		}
-		File help = new File(HelpImage);
+
 		if (!help.exists()) {
 			errorI = HelpImage;
 			error();
 		}
-		File internet = new File(InternetImage);
+		
 		if (!internet.exists()) {
 			errorI = InternetImage;
 			error();
