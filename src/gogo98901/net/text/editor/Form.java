@@ -4,10 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Desktop;
-import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
@@ -15,30 +13,25 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
-import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.ImageIcon;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
-import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.border.BevelBorder;
-import javax.swing.JInternalFrame;
-import javax.swing.JSlider;
 import javax.swing.JProgressBar;
 import javax.swing.Box;
-import javax.swing.JToggleButton;
 
 public class Form extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -46,24 +39,27 @@ public class Form extends JFrame {
 	public static String ClipBoardData = "";
 
 	private JPanel contentPane;
-	private static JPanel jp;
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		if (Main.running) {
-
 			EventQueue.invokeLater(new Runnable() {
 				public void run() {
 					System.out.println("Running...");
-
 				}
 			});
 		} else {
+			Main.lookAndFeel();
 			System.out.println("Unable to run!");
 			System.out.println("Run through (Main.java/Mian.class)");
-			Main.exit();
+			JOptionPane.showOptionDialog(null,
+	                   "Unable to run","JText",
+	                   JOptionPane.PLAIN_MESSAGE,
+	                   JOptionPane.QUESTION_MESSAGE,
+	                   UIManager.getIcon("OptionPane.errorIcon"), null, null);
+			System.exit(0);
 		}
 	}
 
@@ -73,9 +69,10 @@ public class Form extends JFrame {
 	public Form() {
 		setBackground(Color.LIGHT_GRAY);
 		setFont(new Font("Arial", Font.BOLD, 12));
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setSize(720, 500);
 		Main.lookAndFeel();
+		setVisible(true);
 
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -85,6 +82,12 @@ public class Form extends JFrame {
 		menuBar.add(mnFile);
 
 		JMenuItem mntmNew = new JMenuItem("New");
+		mntmNew.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Main.newPage();
+				System.out.println("Starting New");
+			}
+		});
 		mntmNew.setFont(new Font("Arial", Font.PLAIN, 13));
 		mntmNew.setIcon(new ImageIcon(Main.NewImage));
 		mntmNew.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N,
@@ -118,7 +121,7 @@ public class Form extends JFrame {
 		JSeparator separator_1 = new JSeparator();
 		mnFile.add(separator_1);
 
-		JMenuItem mntmExit = new JMenuItem("Exit");
+		JMenuItem mntmExit = new JMenuItem("Exit (close all)");
 		mntmExit.setFont(new Font("Arial", Font.PLAIN, 13));
 		mnFile.add(mntmExit);
 
@@ -178,6 +181,15 @@ public class Form extends JFrame {
 
 		JMenu mnView = new JMenu("View");
 		menuBar.add(mnView);
+
+		JMenuItem mntmErrors = new JMenuItem("Errors");
+		mntmErrors.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Main.Images();
+				Main.error();
+			}
+		});
+		mnView.add(mntmErrors);
 		JMenu mnHelp = new JMenu("Help");
 		mnHelp.setFont(new Font("Arial", Font.PLAIN, 13));
 		menuBar.add(mnHelp);
@@ -239,6 +251,7 @@ public class Form extends JFrame {
 		});
 		mntmSelectAll.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				textArea.selectAll();
 			}
 		});
 		mntmAboutJtext.addActionListener(new ActionListener() {
@@ -267,18 +280,35 @@ public class Form extends JFrame {
 				Main.exit();
 			}
 		});
+		final File wrap = new File("msg/wordWrap.txt");
 		mntmWordWrap.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				File wrap = new File("msg/wordWrap.txt");
+
 				if (wrap.exists()) {
-					textArea.setLineWrap(true);
-					mntmWordWrap.setIcon(new ImageIcon(Main.TickImage));
-				} else {
 					textArea.setLineWrap(false);
 					mntmWordWrap.setIcon(new ImageIcon(Main.CrossImage));
+					wrap.delete();
+					System.out.println("Word Wrap Disabled");
+				} else {
+					textArea.setLineWrap(false);
+					mntmWordWrap.setIcon(new ImageIcon(Main.TickImage));
+					try {
+						wrap.createNewFile();
+					} catch (IOException e1) {
+					}
+					System.out.println("Word Wrap Enabled");
 				}
 			}
 		});
+		if (wrap.exists()) {
+			textArea.setLineWrap(true);
+			mntmWordWrap.setIcon(new ImageIcon(Main.TickImage));
+			System.out.println("Word Wrap is Enabled");
+		} else {
+			textArea.setLineWrap(false);
+			mntmWordWrap.setIcon(new ImageIcon(Main.CrossImage));
+			System.out.println("Word Wrap is Disabled");
+		}
 	}
 
 }
