@@ -13,6 +13,11 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JTextArea;
 import java.awt.Font;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.beans.VetoableChangeListener;
 
 public class Console extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -52,7 +57,27 @@ public class Console extends JFrame {
 				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		contentPane.add(scrollPane, BorderLayout.CENTER);
 
-		JTextArea ConsoleTextArea = new JTextArea();
+		final JTextArea ConsoleTextArea = new JTextArea();
+		ConsoleTextArea.addVetoableChangeListener(new VetoableChangeListener() {
+			public void vetoableChange(PropertyChangeEvent arg0) {
+				ConsoleTextArea.setText(Main.consoleText);
+			}
+		});
+		ConsoleTextArea.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				ConsoleTextArea.setText(Main.consoleText);
+			}
+			@Override
+			public void focusLost(FocusEvent e) {
+				ConsoleTextArea.setText(Main.consoleText);
+			}
+		});
+		ConsoleTextArea.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent e3) {
+				ConsoleTextArea.setText(Main.consoleText);
+			}
+		});
 		ConsoleTextArea.setEditable(false);
 		ConsoleTextArea.setFont(new Font("Monospaced", Font.PLAIN, 11));
 		ConsoleTextArea.setForeground(Color.WHITE);
@@ -63,10 +88,16 @@ public class Console extends JFrame {
 		ConsoleTextArea.append(Main.consoleText);
 		setVisible(true);
 		String oldText = Main.consoleText;
-		//while(true){
-			if(oldText != Main.consoleText){
-				ConsoleTextArea.append(Main.consoleText);
+		if (isActive()) {
+			while (true) {
+				if (oldText != Main.consoleText) {
+					ConsoleTextArea.append(Main.consoleText);
+				}
 			}
-		//}
+		}
 	}
+	public static void update(){
+		
+	}
+	
 }

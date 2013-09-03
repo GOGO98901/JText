@@ -56,7 +56,7 @@ public class Main implements WindowListener {
 	public static boolean running = false;
 	public static boolean errorT = false;
 
-	public static String consoleText = "\n";
+	public static String consoleText = Console.title + "\n";
 	
 	public static void main(String[] args) {
 		running = true;
