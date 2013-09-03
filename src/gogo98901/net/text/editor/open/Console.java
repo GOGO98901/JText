@@ -18,6 +18,10 @@ import java.beans.PropertyChangeEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.beans.VetoableChangeListener;
+import java.awt.event.WindowStateListener;
+import java.awt.event.WindowEvent;
+import java.awt.Dialog.ModalExclusionType;
+import javax.swing.JTextPane;
 
 public class Console extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -27,22 +31,30 @@ public class Console extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-	public static String title = "JText Console";
-	public static String titleBar = "#-------------------" + title
-			+ "------------------#";
+	public static String title = Main.title + " Console";
+	public static String titleBar = "#------------------- " + title
+			+ " -------------------#";
 
 	public static void main(String[] args) {
 		Console frame = new Console();
+		if(frame.isEnabled()){
+			System.out.println("Console is 'Enabled'");
+			Main.consoleText += "Console is 'Enabled' \n";
+		}
 	}
 
 	/**
 	 * Create the frame.
 	 */
 	public Console() {
+		setBackground(Color.WHITE);
+		setType(Type.POPUP);
+		setModalExclusionType(ModalExclusionType.TOOLKIT_EXCLUDE);
+		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		Main.lookAndFeel();
-		setSize(403, 350);
-		setTitle(title);
+		setSize(400, 350);
+		setTitle("");
 		setLocationRelativeTo(null);
 		setResizable(false);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Main.ConsoleImage));
@@ -51,6 +63,17 @@ public class Console extends JFrame {
 		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
+		
+		JTextPane txtpnJtextConsole = new JTextPane();
+		contentPane.add(txtpnJtextConsole, BorderLayout.NORTH);
+		txtpnJtextConsole.setEditable(false);
+		txtpnJtextConsole.setToolTipText("JTEXT CONSOLE");
+		txtpnJtextConsole.setFont(new Font("Monospaced", Font.PLAIN, 11));
+		txtpnJtextConsole.setBackground(Color.DARK_GRAY);
+		txtpnJtextConsole.setForeground(Color.WHITE);
+		txtpnJtextConsole.setText("Loading");
+
+		txtpnJtextConsole.setText(titleBar);
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane
@@ -83,20 +106,23 @@ public class Console extends JFrame {
 		ConsoleTextArea.setForeground(Color.WHITE);
 		ConsoleTextArea.setBackground(Color.BLACK);
 		scrollPane.setViewportView(ConsoleTextArea);
-
-		ConsoleTextArea.setText(titleBar);
+addWindowStateListener(new WindowStateListener() {
+			public void windowStateChanged(WindowEvent arg0) {
+				ConsoleTextArea.setText(Main.consoleText);
+			}
+		});
 		ConsoleTextArea.append(Main.consoleText);
 		setVisible(true);
 		String oldText = Main.consoleText;
-		if (isActive()) {
-			while (true) {
+		if (isEnabled()) {
+			//while (true) {
 				if (oldText != Main.consoleText) {
 					ConsoleTextArea.append(Main.consoleText);
 				}
-			}
+			//}
 		}
 	}
-	public static void update(){
+	public static void logConsole(){
 		
 	}
 	

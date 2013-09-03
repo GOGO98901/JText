@@ -16,11 +16,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -32,14 +34,13 @@ import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.border.BevelBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JProgressBar;
 import javax.swing.Box;
-import javax.swing.JScrollBar;
-import java.awt.Scrollbar;
 import javax.swing.JScrollPane;
-import java.awt.Cursor;
+import java.awt.event.WindowFocusListener;
 
-public class Form extends JFrame implements WindowListener{
+public class Form extends JFrame {
 	private static final long serialVersionUID = 1L;
 
 	public static String ClipBoardData = "";
@@ -61,12 +62,15 @@ public class Form extends JFrame implements WindowListener{
 			Main.lookAndFeel();
 			System.out.println("Unable to run!");
 			System.out.println("Run through (Main.java/Mian.class)");
+			JOptionPane.showOptionDialog(null, "Unable to run", "JText",
+					JOptionPane.PLAIN_MESSAGE, JOptionPane.QUESTION_MESSAGE,
+					UIManager.getIcon("OptionPane.errorIcon"), null, null);
 			JOptionPane.showOptionDialog(null,
-	                   "Unable to run","JText",
-	                   JOptionPane.PLAIN_MESSAGE,
-	                   JOptionPane.QUESTION_MESSAGE,
-	                   UIManager.getIcon("OptionPane.errorIcon"), null, null);
-			System.exit(3);
+					"Attempting to run through Main.java", "JText",
+					JOptionPane.PLAIN_MESSAGE, JOptionPane.QUESTION_MESSAGE,
+					UIManager.getIcon("OptionPane.errorIcon"), null, null);
+			Main.consoleText += "Unable to run\nAttempting to run through Main.java\n";
+			Main.main(args);
 		}
 	}
 
@@ -74,6 +78,17 @@ public class Form extends JFrame implements WindowListener{
 	 * Create the frame.
 	 */
 	public Form() {
+		addWindowFocusListener(new WindowFocusListener() {
+			public void windowGainedFocus(WindowEvent arg0) {
+				System.out.println("Welcome Back - 'windowGainedFocus'");
+				Main.consoleText += "Welcome Back - 'windowGainedFocus'\n";
+			}
+
+			public void windowLostFocus(WindowEvent arg0) {
+				System.out.println("Good bye - 'windowLostFocus'");
+				Main.consoleText += "Good bye - 'windowLostFocus'\n";
+			}
+		});
 		setBackground(Color.LIGHT_GRAY);
 		setFont(new Font("Arial", Font.BOLD, 12));
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -186,6 +201,9 @@ public class Form extends JFrame implements WindowListener{
 		mntmWordWrap.setFont(new Font("Arial", Font.PLAIN, 13));
 		mntmWordWrap.setIcon(new ImageIcon(Main.TickImage));
 		mnFormat.add(mntmWordWrap);
+		
+		JMenuItem mntmFont = new JMenuItem("Font");
+		mnFormat.add(mntmFont);
 
 		JMenu mnView = new JMenu("View");
 		menuBar.add(mnView);
@@ -198,7 +216,7 @@ public class Form extends JFrame implements WindowListener{
 			}
 		});
 		mnView.add(mntmErrors);
-		
+
 		JMenuItem mntmConsole = new JMenuItem("Console");
 		mntmConsole.setIcon(new ImageIcon(Main.ConsoleIconImage));
 		mntmConsole.addActionListener(new ActionListener() {
@@ -208,7 +226,7 @@ public class Form extends JFrame implements WindowListener{
 			}
 		});
 		mnView.add(mntmConsole);
-		
+
 		JMenu mnHelp = new JMenu("Help");
 		mnHelp.setFont(new Font("Arial", Font.PLAIN, 13));
 		menuBar.add(mnHelp);
@@ -236,9 +254,8 @@ public class Form extends JFrame implements WindowListener{
 		final JTextArea textArea = new JTextArea();
 		textArea.setWrapStyleWord(true);
 		textArea.setToolTipText("Type here");
-		contentPane.add(textArea, BorderLayout.CENTER);
 		textArea.setFont(UIManager.getFont("ToolTip.font"));
-		
+
 		JScrollPane scrollPane = new JScrollPane();
 		contentPane.add(scrollPane, BorderLayout.CENTER);
 		scrollPane.setViewportView(textArea);
@@ -328,6 +345,34 @@ public class Form extends JFrame implements WindowListener{
 				}
 			}
 		});
+		mntmOpen.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JFileChooser opChooser = new JFileChooser();
+				FileNameExtensionFilter filter = new FileNameExtensionFilter(
+						"Text File", "txt");
+				opChooser.setFileFilter(filter);
+				int returnVal = opChooser.showOpenDialog(null);
+				File chosenFile = opChooser.getSelectedFile();
+
+				try {
+					if (returnVal == JFileChooser.APPROVE_OPTION) {
+						BufferedReader br = new BufferedReader(new FileReader(chosenFile));
+						String data;
+						while ((data = br.readLine()) != null) {
+							textArea.append(data + "\n");
+						}
+						br.close();
+					}
+					System.out.println("Opened '" + chosenFile + "'");
+					Main.consoleText += "Opened '" + chosenFile + "'";
+					setTitle(chosenFile + " - " + Main.title);
+				} catch (IOException IOe) {
+					System.out.println("Error opening '" + chosenFile + "'");
+					Main.consoleText += "Error opening '" + chosenFile + "'";
+					JOptionPane.showMessageDialog(null, "Error opening '" + chosenFile + "'");
+				}
+			}
+		});
 		if (wrap.exists()) {
 			textArea.setLineWrap(true);
 			mntmWordWrap.setIcon(new ImageIcon(Main.TickImage));
@@ -340,22 +385,4 @@ public class Form extends JFrame implements WindowListener{
 			System.out.println("Word Wrap is Disabled");
 		}
 	}
-
-	@Override
-	public void windowActivated(WindowEvent e) {}
-	@Override
-	public void windowClosed(WindowEvent e) {}
-	@Override
-	public void windowClosing(WindowEvent e) {
-		Main.exit();
-	}
-	@Override
-	public void windowDeactivated(WindowEvent e) {}
-	@Override
-	public void windowDeiconified(WindowEvent e) {}
-	@Override
-	public void windowIconified(WindowEvent e) {}
-	@Override
-	public void windowOpened(WindowEvent e) {}
-
 }

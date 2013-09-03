@@ -32,6 +32,7 @@ public class Main implements WindowListener {
 	public static String errorI = "There are no current errors";
 	public static String systemName = System.getProperty("os.name");
 	public static String systemversion = System.getProperty("os.version");
+	public static String appVersion = "0.9";
 
 	static File icon = new File(IconImage);
 	static File cross = new File(CrossImage);
@@ -56,12 +57,12 @@ public class Main implements WindowListener {
 	public static boolean running = false;
 	public static boolean errorT = false;
 
-	public static String consoleText = Console.title + "\n";
+	public static String consoleText = "";
 	
 	public static void main(String[] args) {
 		running = true;
-		System.out.println("Starting " + title);
-		consoleText += "Starting " + title + "\n";
+		System.out.println("Starting " + title + "\nApp Version '" + appVersion + "'");
+		consoleText += "Starting " + title + "\nApp Version '" + appVersion + "'" + "\n";
 		System.out.println("Operrating System : " + systemName + "| Version : "
 				+ systemversion);
 		consoleText += "Operrating System : " + systemName + "| Version : "
@@ -203,6 +204,7 @@ public class Main implements WindowListener {
 		if (result == JOptionPane.YES_OPTION) {
 			System.out.println("Exiting");
 			consoleText += "Exiting" + "\n";
+			Console.logConsole();
 			System.exit(3);
 		}
 	}
