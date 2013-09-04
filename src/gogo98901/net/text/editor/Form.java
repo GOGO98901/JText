@@ -1,10 +1,9 @@
 package gogo98901.net.text.editor;
 
-import gogo98901.net.text.editor.open.Console;
+import gogo98901.net.text.editor.open.*;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -17,9 +16,12 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -34,11 +36,11 @@ import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.border.BevelBorder;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.JProgressBar;
-import javax.swing.Box;
 import javax.swing.JScrollPane;
 import java.awt.event.WindowFocusListener;
+import javax.swing.JToolBar;
 
 public class Form extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -78,17 +80,6 @@ public class Form extends JFrame {
 	 * Create the frame.
 	 */
 	public Form() {
-		addWindowFocusListener(new WindowFocusListener() {
-			public void windowGainedFocus(WindowEvent arg0) {
-				System.out.println("Welcome Back - 'windowGainedFocus'");
-				Main.consoleText += "Welcome Back - 'windowGainedFocus'\n";
-			}
-
-			public void windowLostFocus(WindowEvent arg0) {
-				System.out.println("Good bye - 'windowLostFocus'");
-				Main.consoleText += "Good bye - 'windowLostFocus'\n";
-			}
-		});
 		setBackground(Color.LIGHT_GRAY);
 		setFont(new Font("Arial", Font.BOLD, 12));
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -203,6 +194,12 @@ public class Form extends JFrame {
 		mnFormat.add(mntmWordWrap);
 		
 		JMenuItem mntmFont = new JMenuItem("Font");
+		mntmFont.setIcon(new ImageIcon(Main.FontImage));
+		mntmFont.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				gogo98901.net.text.editor.open.FontF.main(null);
+			}
+		});
 		mnFormat.add(mntmFont);
 
 		JMenu mnView = new JMenu("View");
@@ -215,6 +212,9 @@ public class Form extends JFrame {
 				Main.error();
 			}
 		});
+		
+		final JMenuItem mntmToolbar = new JMenuItem("Toolbar");
+		mnView.add(mntmToolbar);
 		mnView.add(mntmErrors);
 
 		JMenuItem mntmConsole = new JMenuItem("Console");
@@ -251,10 +251,44 @@ public class Form extends JFrame {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 		setLocationRelativeTo(null);
+		
+		final JToolBar toolBar = new JToolBar();
+		contentPane.add(toolBar, BorderLayout.NORTH);
+		toolBar.setFont(new Font("Arial", Font.PLAIN, 12));
+		toolBar.setToolTipText("Tool Bar");
+		
+		JMenuItem mntmSave_1 = new JMenuItem("Save");
+		mntmSave_1.setIcon(new ImageIcon(Main.SaveImage));
+		toolBar.add(mntmSave_1);
+		
+		JMenuItem mntmSaveAs_1 = new JMenuItem("Save As");
+		mntmSaveAs_1.setIcon(new ImageIcon(Main.SaveAsImage));
+		toolBar.add(mntmSaveAs_1);
+		
+		JMenuItem mntmPaste_1 = new JMenuItem("Paste");
+		mntmPaste_1.setIcon(new ImageIcon(Main.PasteImage));
+		toolBar.add(mntmPaste_1);
+		
+		JMenuItem mntmCopy_1 = new JMenuItem("Copy");
+		mntmCopy_1.setIcon(new ImageIcon(Main.CopyImage));
+		toolBar.add(mntmCopy_1);
+		
+		JMenuItem mntmCut_1 = new JMenuItem("Cut");
+		mntmCut_1.setIcon(new ImageIcon(Main.CutImage));
+		toolBar.add(mntmCut_1);
+		final File toolBarFile = new File("cfg/config/toolBarFile.txt");
+		if(toolBarFile.exists()){
+			toolBar.setVisible(true);
+		}else{
+			toolBar.setVisible(false);
+		}
+		
+		
 		final JTextArea textArea = new JTextArea();
 		textArea.setWrapStyleWord(true);
 		textArea.setToolTipText("Type here");
-		textArea.setFont(UIManager.getFont("ToolTip.font"));
+		textArea.setFont(new java.awt.Font(FontF.setFont,
+				java.awt.Font.PLAIN, FontF.setFontSize));
 
 		JScrollPane scrollPane = new JScrollPane();
 		contentPane.add(scrollPane, BorderLayout.CENTER);
@@ -309,21 +343,12 @@ public class Form extends JFrame {
 			}
 		});
 		mntmExit.setIcon(new ImageIcon(Main.QuitImage));
-
-		Component horizontalStrut = Box.createHorizontalStrut(356);
-		menuBar.add(horizontalStrut);
-
-		JProgressBar progressBar = new JProgressBar();
-		menuBar.add(progressBar);
-
-		Component horizontalStrut_1 = Box.createHorizontalStrut(10);
-		menuBar.add(horizontalStrut_1);
 		mntmExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				Main.exit();
 			}
 		});
-		final File wrap = new File("msg/wordWrap.txt");
+		final File wrap = new File("cfg/config/wordWrap.txt");
 		mntmWordWrap.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -338,11 +363,49 @@ public class Form extends JFrame {
 					mntmWordWrap.setIcon(new ImageIcon(Main.TickImage));
 					try {
 						wrap.createNewFile();
-					} catch (IOException e1) {
-					}
+					} catch (IOException e1) {}
 					System.out.println("Word Wrap Enabled");
 					Main.consoleText += "Word Wrap Enabled" + "\n";
 				}
+			}
+		});
+
+		mntmSaveAs.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser sdChooser = new JFileChooser();
+				FileNameExtensionFilter filterTxt = new FileNameExtensionFilter("Text File", "txt");
+				sdChooser.setFileFilter(filterTxt);
+				int returnVal = sdChooser.showSaveDialog(null);
+				
+				String locationF = "";
+				
+				try{
+					if(returnVal == JFileChooser.APPROVE_OPTION){
+						File directory = sdChooser.getCurrentDirectory();
+						String path = directory.getAbsolutePath();
+						String fileName = sdChooser.getSelectedFile().getName();
+						FileFilter cFilter = sdChooser.getFileFilter();
+						if(cFilter == filterTxt){
+							if(!fileName.contains(".txt")){
+								fileName += ".txt";
+							}
+						}
+						locationF = path + "\\" + fileName;
+						BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(locationF), "UTF-8"));
+						bw.write(textArea.getText());
+						bw.close();
+						System.out.println("Saved '" + locationF + "'");
+						Main.consoleText += "Saved '" + locationF + "'\n";
+						setTitle(locationF + " - " + Main.title);
+							
+					}
+				}catch(IOException IOe2){
+					System.out.println("Error trying to save this to '" + locationF + "':");
+					System.out.println(textArea.getText());
+					Main.consoleText += "Error trying to save this to '" + locationF + "':\n";
+					Main.consoleText += textArea.getText() + "\n";
+				}
+				
 			}
 		});
 		mntmOpen.addActionListener(new ActionListener() {
@@ -371,6 +434,71 @@ public class Form extends JFrame {
 					Main.consoleText += "Error opening '" + chosenFile + "'";
 					JOptionPane.showMessageDialog(null, "Error opening '" + chosenFile + "'");
 				}
+			}
+		});
+		addWindowFocusListener(new WindowFocusListener() {
+			public void windowGainedFocus(WindowEvent arg0) {
+				System.out.println("Welcome Back - 'windowGainedFocus'");
+				Main.consoleText += "Welcome Back - 'windowGainedFocus'\n";
+				textArea.setFont(new java.awt.Font(FontF.setFont,
+						java.awt.Font.PLAIN, FontF.setFontSize));
+			}
+
+			public void windowLostFocus(WindowEvent arg0) {
+				System.out.println("Good bye - 'windowLostFocus'");
+				Main.consoleText += "Good bye - 'windowLostFocus'\n";
+			}
+		});
+		mntmToolbar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (toolBarFile.exists()) {
+					mntmToolbar.setIcon(new ImageIcon(Main.CrossImage));
+					toolBarFile.delete();
+					System.out.println("Tool Bar Disabled");
+					Main.consoleText += "Tool Bar Disabled" + "\n";
+					toolBar.setVisible(false);
+				} else {
+					mntmToolbar.setIcon(new ImageIcon(Main.TickImage));
+					try {
+						toolBarFile.createNewFile();
+					} catch (IOException e1) {}
+					System.out.println("Tool Bar Enabled");
+					Main.consoleText += "Tool Bar Enabled" + "\n";
+					toolBar.setVisible(true);
+				}
+				
+			}
+		});
+		
+		mntmCut_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				ClipBoardData = textArea.getSelectedText();
+				StringSelection stringSelction = new StringSelection(
+						ClipBoardData);
+				Clipboard clipBoard = Toolkit.getDefaultToolkit()
+						.getSystemClipboard();
+				clipBoard.setContents(stringSelction, null);
+				textArea.replaceSelection("");
+			}
+		});
+		mntmCopy_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ClipBoardData = textArea.getSelectedText();
+				StringSelection stringSelction = new StringSelection(
+						ClipBoardData);
+				Clipboard clipBoard = Toolkit.getDefaultToolkit()
+						.getSystemClipboard();
+				clipBoard.setContents(stringSelction, null);
+			}
+		});
+		mntmSave_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//save area
+			}
+		});
+		mntmPaste_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				textArea.append(ClipBoardData);
 			}
 		});
 		if (wrap.exists()) {

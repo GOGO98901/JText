@@ -28,6 +28,7 @@ public class Main implements WindowListener {
 	public static String InternetImage = "res/net.png";
 	public static String HelpImage = "res/help.gif";
 	public static String ConsoleImage = "res/console.png";
+	public static String FontImage = "res/font.png";
 	public static String ConsoleIconImage = "res/consoleIcon.png";
 	public static String errorI = "There are no current errors";
 	public static String systemName = System.getProperty("os.name");
@@ -51,6 +52,7 @@ public class Main implements WindowListener {
 	static File internet = new File(InternetImage);
 	static File consoleI = new File(ConsoleImage);
 	static File consoleIcon = new File(ConsoleIconImage);
+	static File font = new File(FontImage);
 
 	static ImageIcon newIcon = new ImageIcon(NewImage);
 
@@ -175,6 +177,10 @@ public class Main implements WindowListener {
 		}
 		if (!consoleIcon.exists()) {
 			errorI = ConsoleIconImage;
+			error();
+		}
+		if (!font.exists()) {
+			errorI = FontImage;
 			error();
 		}
 	}

@@ -13,9 +13,11 @@ import java.awt.Choice;
 import java.awt.Color;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
+import java.awt.Toolkit;
 
-public class Font extends JFrame {
-
+public class FontF extends JFrame {
+	private static final long serialVersionUID = 1L;
+	
 	private JPanel contentPane;
 	public static String setFont = "Arial";
 	public static int setFontSize = 13;
@@ -27,7 +29,7 @@ public class Font extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Font frame = new Font();
+					FontF frame = new FontF();
 					frame.setTitle("Font");
 					frame.setResizable(false);
 
@@ -43,11 +45,11 @@ public class Font extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Font() {
-		setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 12));
+	public FontF() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Main.FontImage));
+		setFont(new java.awt.Font(setFont, java.awt.Font.PLAIN, 12));
 		setAlwaysOnTop(true);
 		setSize(550, 340);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Main.lookAndFeel();
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
