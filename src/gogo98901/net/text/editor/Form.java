@@ -22,6 +22,8 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -41,6 +43,10 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JScrollPane;
 import java.awt.event.WindowFocusListener;
 import javax.swing.JToolBar;
+import java.awt.Component;
+import java.awt.ComponentOrientation;
+import java.awt.Dimension;
+import javax.swing.border.EmptyBorder;
 
 public class Form extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -183,6 +189,14 @@ public class Form extends JFrame {
 		mntmSelectAll.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A,
 				InputEvent.CTRL_MASK));
 		mnEdit.add(mntmSelectAll);
+		
+		JSeparator separator_5 = new JSeparator();
+		mnEdit.add(separator_5);
+		
+		JMenuItem mntmTimeDate = new JMenuItem("Time Date");
+		mntmTimeDate.setIcon(new ImageIcon(Main.TimeDateImage));
+		mntmTimeDate.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
+		mnEdit.add(mntmTimeDate);
 
 		JMenu mnFormat = new JMenu("Format");
 		mnFormat.setFont(new Font("Arial", Font.PLAIN, 13));
@@ -192,15 +206,85 @@ public class Form extends JFrame {
 		mntmWordWrap.setFont(new Font("Arial", Font.PLAIN, 13));
 		mntmWordWrap.setIcon(new ImageIcon(Main.TickImage));
 		mnFormat.add(mntmWordWrap);
-		
+
 		JMenuItem mntmFont = new JMenuItem("Font");
 		mntmFont.setIcon(new ImageIcon(Main.FontImage));
 		mntmFont.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				gogo98901.net.text.editor.open.FontF.main(null);
+				gogo98901.net.text.editor.open.FontPicker.main(null);
 			}
 		});
 		mnFormat.add(mntmFont);
+		
+		JMenu mnTimeDate = new JMenu("Time & Date");
+		mnTimeDate.setIcon(new ImageIcon(Main.TimeDateImage));
+		mnFormat.add(mnTimeDate);
+		
+		JMenuItem mntmMmhhDdmmyyyy = new JMenuItem("mm:HH dd:MM:yyyy");
+		mntmMmhhDdmmyyyy.setIcon(new ImageIcon(Main.TimeDateImage));
+		mntmMmhhDdmmyyyy.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Main.dateTimeFormat = new SimpleDateFormat("mm:HH dd/MM/yyyy");	
+				Main.dateTime = new Date();
+				Main.timeDate = Main.dateTimeFormat.format(Main.dateTime);
+			}
+		});
+		mnTimeDate.add(mntmMmhhDdmmyyyy);
+		
+		JMenuItem mntmMmhhYyyymmdd = new JMenuItem("mm:HH yyyy:MM:dd");
+		mntmMmhhYyyymmdd.setIcon(new ImageIcon(Main.TimeDateImage));
+		mntmMmhhYyyymmdd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Main.dateTimeFormat = new SimpleDateFormat("mm:HH yyyy:MM:dd");	
+				Main.dateTime = new Date();
+				Main.timeDate = Main.dateTimeFormat.format(Main.dateTime);
+			}
+		});
+		mnTimeDate.add(mntmMmhhYyyymmdd);
+		
+		JMenuItem mntmMmhhMmddyyyy = new JMenuItem("mm:HH MM:dd:yyyy");
+		mntmMmhhMmddyyyy.setIcon(new ImageIcon(Main.TimeDateImage));
+		mntmMmhhMmddyyyy.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Main.dateTimeFormat = new SimpleDateFormat("mm:HH MM:dd:yyyy");	
+				Main.dateTime = new Date();
+				Main.timeDate = Main.dateTimeFormat.format(Main.dateTime);
+			}
+		});
+		mnTimeDate.add(mntmMmhhMmddyyyy);
+		
+		JMenuItem mntmDdmmyyyyMmhh = new JMenuItem("dd:MM:yyyy mm:HH");
+		mntmDdmmyyyyMmhh.setIcon(new ImageIcon(Main.TimeDateImage));
+		mntmDdmmyyyyMmhh.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Main.dateTimeFormat = new SimpleDateFormat("dd:MM:yyyy mm:HH");	
+				Main.dateTime = new Date();
+				Main.timeDate = Main.dateTimeFormat.format(Main.dateTime);
+			}
+		});
+		mnTimeDate.add(mntmDdmmyyyyMmhh);
+		
+		JMenuItem mntmYyyymmddMmhh = new JMenuItem("yyyy:MM:dd mm:HH");
+		mntmYyyymmddMmhh.setIcon(new ImageIcon(Main.TimeDateImage));
+		mntmYyyymmddMmhh.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Main.dateTimeFormat = new SimpleDateFormat("yyyy:MM:dd mm:HH");	
+				Main.dateTime = new Date();
+				Main.timeDate = Main.dateTimeFormat.format(Main.dateTime);
+			}
+		});
+		mnTimeDate.add(mntmYyyymmddMmhh);
+		
+		JMenuItem mntmMmddyyyyMmhh = new JMenuItem("MM:dd:yyyy mm:HH");
+		mntmMmddyyyyMmhh.setIcon(new ImageIcon(Main.TimeDateImage));
+		mntmMmddyyyyMmhh.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Main.dateTimeFormat = new SimpleDateFormat("MM:dd:yyyy mm:HH");	
+				Main.dateTime = new Date();
+				Main.timeDate = Main.dateTimeFormat.format(Main.dateTime);
+			}
+		});
+		mnTimeDate.add(mntmMmddyyyyMmhh);
 
 		JMenu mnView = new JMenu("View");
 		menuBar.add(mnView);
@@ -212,7 +296,7 @@ public class Form extends JFrame {
 				Main.error();
 			}
 		});
-		
+
 		final JMenuItem mntmToolbar = new JMenuItem("Toolbar");
 		mnView.add(mntmToolbar);
 		mnView.add(mntmErrors);
@@ -251,47 +335,79 @@ public class Form extends JFrame {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 		setLocationRelativeTo(null);
-		
+
 		final JToolBar toolBar = new JToolBar();
+		toolBar.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+		toolBar.setDoubleBuffered(true);
+		toolBar.setAlignmentX(Component.LEFT_ALIGNMENT);
 		contentPane.add(toolBar, BorderLayout.NORTH);
 		toolBar.setFont(new Font("Arial", Font.PLAIN, 12));
 		toolBar.setToolTipText("Tool Bar");
-		
-		JMenuItem mntmSave_1 = new JMenuItem("Save");
+
+		JMenuItem mntmNew_1 = new JMenuItem("");
+		mntmNew_1.setMaximumSize(new Dimension(32, 32767));
+		mntmNew_1.setAlignmentX(Component.LEFT_ALIGNMENT);
+		mntmNew_1.setIcon(new ImageIcon(Main.NewImage));
+		toolBar.add(mntmNew_1);
+
+		JMenuItem mntmOpen_1 = new JMenuItem("");
+		mntmOpen_1.setMaximumSize(new Dimension(32, 32767));
+		mntmOpen_1.setAlignmentX(Component.LEFT_ALIGNMENT);
+		mntmOpen_1.setIcon(new ImageIcon(Main.OpenImage));
+		toolBar.add(mntmOpen_1);
+
+		JMenuItem mntmSave_1 = new JMenuItem("");
+		mntmSave_1.setMaximumSize(new Dimension(32, 32767));
+		mntmSave_1.setAlignmentX(Component.LEFT_ALIGNMENT);
 		mntmSave_1.setIcon(new ImageIcon(Main.SaveImage));
 		toolBar.add(mntmSave_1);
-		
-		JMenuItem mntmSaveAs_1 = new JMenuItem("Save As");
+
+		JMenuItem mntmSaveAs_1 = new JMenuItem("");
+		mntmSaveAs_1.setMaximumSize(new Dimension(32, 32767));
+		mntmSaveAs_1.setAlignmentX(Component.LEFT_ALIGNMENT);
 		mntmSaveAs_1.setIcon(new ImageIcon(Main.SaveAsImage));
 		toolBar.add(mntmSaveAs_1);
-		
-		JMenuItem mntmPaste_1 = new JMenuItem("Paste");
+
+		JMenuItem mntmClose_1 = new JMenuItem("");
+		mntmClose_1.setMaximumSize(new Dimension(32, 32767));
+		mntmClose_1.setAlignmentX(Component.LEFT_ALIGNMENT);
+		mntmClose_1.setIcon(new ImageIcon(Main.QuitImage));
+		toolBar.add(mntmClose_1);
+
+		JMenuItem mntmPaste_1 = new JMenuItem("");
+		mntmPaste_1.setMaximumSize(new Dimension(32, 32767));
+		mntmPaste_1.setAlignmentX(Component.LEFT_ALIGNMENT);
 		mntmPaste_1.setIcon(new ImageIcon(Main.PasteImage));
 		toolBar.add(mntmPaste_1);
-		
-		JMenuItem mntmCopy_1 = new JMenuItem("Copy");
+
+		JMenuItem mntmCopy_1 = new JMenuItem("");
+		mntmCopy_1.setMaximumSize(new Dimension(32, 32767));
+		mntmCopy_1.setAlignmentX(Component.LEFT_ALIGNMENT);
 		mntmCopy_1.setIcon(new ImageIcon(Main.CopyImage));
 		toolBar.add(mntmCopy_1);
-		
-		JMenuItem mntmCut_1 = new JMenuItem("Cut");
+
+		JMenuItem mntmCut_1 = new JMenuItem("");
+		mntmCut_1.setMaximumSize(new Dimension(32, 32767));
+		mntmCut_1.setAlignmentX(Component.LEFT_ALIGNMENT);
 		mntmCut_1.setIcon(new ImageIcon(Main.CutImage));
 		toolBar.add(mntmCut_1);
 		final File toolBarFile = new File("cfg/config/toolBarFile.txt");
-		if(toolBarFile.exists()){
+		if (toolBarFile.exists()) {
 			toolBar.setVisible(true);
-		}else{
+			mntmToolbar.setIcon(new ImageIcon(Main.TickImage));
+		} else {
 			toolBar.setVisible(false);
+			mntmToolbar.setIcon(new ImageIcon(Main.CrossImage));
 		}
-		
-		
-		final JTextArea textArea = new JTextArea();
-		textArea.setWrapStyleWord(true);
-		textArea.setToolTipText("Type here");
-		textArea.setFont(new java.awt.Font(FontF.setFont,
-				java.awt.Font.PLAIN, FontF.setFontSize));
 
 		JScrollPane scrollPane = new JScrollPane();
 		contentPane.add(scrollPane, BorderLayout.CENTER);
+		
+		final JTextArea textArea = new JTextArea();
+		textArea.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+		textArea.setCaretColor(Color.BLACK);
+		textArea.setBackground(Color.WHITE);
+		textArea.setBorder(new EmptyBorder(5, 5, 5, 5));
 		scrollPane.setViewportView(textArea);
 		mntmCut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -348,6 +464,11 @@ public class Form extends JFrame {
 				Main.exit();
 			}
 		});
+		mntmClose_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Main.exit();
+			}
+		});
 		final File wrap = new File("cfg/config/wordWrap.txt");
 		mntmWordWrap.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -363,7 +484,8 @@ public class Form extends JFrame {
 					mntmWordWrap.setIcon(new ImageIcon(Main.TickImage));
 					try {
 						wrap.createNewFile();
-					} catch (IOException e1) {}
+					} catch (IOException e1) {
+					}
 					System.out.println("Word Wrap Enabled");
 					Main.consoleText += "Word Wrap Enabled" + "\n";
 				}
@@ -373,53 +495,175 @@ public class Form extends JFrame {
 		mntmSaveAs.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser sdChooser = new JFileChooser();
-				FileNameExtensionFilter filterTxt = new FileNameExtensionFilter("Text File", "txt");
+				FileNameExtensionFilter filterTxt = new FileNameExtensionFilter(
+						"Text File (*.txt)", "txt");
 				sdChooser.setFileFilter(filterTxt);
+				FileNameExtensionFilter filterHtml = new FileNameExtensionFilter(
+						"Web Page File (*.html)", "html");
+				sdChooser.addChoosableFileFilter(filterHtml);
+				FileNameExtensionFilter filterPhp = new FileNameExtensionFilter(
+						"Web Page File (*.php)", "php");
+				sdChooser.addChoosableFileFilter(filterPhp);
+				FileNameExtensionFilter filterLog = new FileNameExtensionFilter(
+						"Log File (*.log)", "log");
+				sdChooser.addChoosableFileFilter(filterLog);
+				FileNameExtensionFilter filterPy = new FileNameExtensionFilter(
+						"Python File (*.py)", "py");
+				sdChooser.addChoosableFileFilter(filterPy);
+				FileNameExtensionFilter filterJava = new FileNameExtensionFilter(
+						"Java File (*.java)", "java");
+				sdChooser.addChoosableFileFilter(filterJava);
+				FileNameExtensionFilter filterJavaClass = new FileNameExtensionFilter(
+						"Java Class (*.class)", "class");
+				sdChooser.addChoosableFileFilter(filterJavaClass);
+				FileNameExtensionFilter filterLua = new FileNameExtensionFilter(
+						"Lua File (*.lua)", "lua");
+				sdChooser.addChoosableFileFilter(filterLua);
+				FileNameExtensionFilter filterBatch = new FileNameExtensionFilter(
+						"Batch File (*.bat)", "bat");
+				sdChooser.addChoosableFileFilter(filterBatch);
+				FileNameExtensionFilter filterCmd = new FileNameExtensionFilter(
+						"Cmd File (*.cmd)", "cmd");
+				sdChooser.addChoosableFileFilter(filterCmd);
+				FileNameExtensionFilter filterAs = new FileNameExtensionFilter(
+						"Flash Action Script (*.as)", "as");
+				sdChooser.addChoosableFileFilter(filterAs);
+
 				int returnVal = sdChooser.showSaveDialog(null);
-				
+
 				String locationF = "";
-				
-				try{
-					if(returnVal == JFileChooser.APPROVE_OPTION){
+
+				try {
+					if (returnVal == JFileChooser.APPROVE_OPTION) {
 						File directory = sdChooser.getCurrentDirectory();
 						String path = directory.getAbsolutePath();
 						String fileName = sdChooser.getSelectedFile().getName();
 						FileFilter cFilter = sdChooser.getFileFilter();
-						if(cFilter == filterTxt){
-							if(!fileName.contains(".txt")){
+						if (cFilter == filterTxt) {
+							if (!fileName.contains(".txt")) {
 								fileName += ".txt";
 							}
 						}
+						if (cFilter == filterHtml) {
+							if (!fileName.contains(".html")) {
+								fileName += ".html";
+							}
+						}
+						if (cFilter == filterTxt) {
+							if (!fileName.contains(".txt")) {
+								fileName += ".txt";
+							}
+						}
+						if (cFilter == filterPhp) {
+							if (!fileName.contains(".php")) {
+								fileName += ".php";
+							}
+						}
+						if (cFilter == filterLog) {
+							if (!fileName.contains(".log")) {
+								fileName += ".log";
+							}
+						}
+						if (cFilter == filterPy) {
+							if (!fileName.contains(".py")) {
+								fileName += ".py";
+							}
+						}
+						if (cFilter == filterJava) {
+							if (!fileName.contains(".java")) {
+								fileName += ".java";
+							}
+						}
+						if (cFilter == filterJavaClass) {
+							if (!fileName.contains(".class")) {
+								fileName += ".class";
+							}
+						}
+						if (cFilter == filterLua) {
+							if (!fileName.contains(".lua")) {
+								fileName += ".lua";
+							}
+						}
+						if (cFilter == filterBatch) {
+							if (!fileName.contains(".bat")) {
+								fileName += ".bat";
+							}
+						}
+						if (cFilter == filterCmd) {
+							if (!fileName.contains(".cmd")) {
+								fileName += ".cmd";
+							}
+						}
+						if (cFilter == filterAs) {
+							if (!fileName.contains(".as")) {
+								fileName += ".as";
+							}
+						}
 						locationF = path + "\\" + fileName;
-						BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(locationF), "UTF-8"));
+						BufferedWriter bw = new BufferedWriter(
+								new OutputStreamWriter(new FileOutputStream(
+										locationF), "UTF-8"));
 						bw.write(textArea.getText());
 						bw.close();
 						System.out.println("Saved '" + locationF + "'");
 						Main.consoleText += "Saved '" + locationF + "'\n";
 						setTitle(locationF + " - " + Main.title);
-							
+
 					}
-				}catch(IOException IOe2){
-					System.out.println("Error trying to save this to '" + locationF + "':");
+				} catch (IOException IOe2) {
+					System.out.println("Error trying to save this to '"
+							+ locationF + "':");
 					System.out.println(textArea.getText());
-					Main.consoleText += "Error trying to save this to '" + locationF + "':\n";
+					Main.consoleText += "Error trying to save this to '"
+							+ locationF + "':\n";
 					Main.consoleText += textArea.getText() + "\n";
 				}
-				
+
 			}
 		});
 		mntmOpen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				JFileChooser opChooser = new JFileChooser();
-				FileNameExtensionFilter filter = new FileNameExtensionFilter(
+				FileNameExtensionFilter filterTxt = new FileNameExtensionFilter(
 						"Text File", "txt");
-				opChooser.setFileFilter(filter);
+				opChooser.setFileFilter(filterTxt);
+				FileNameExtensionFilter filterHtml = new FileNameExtensionFilter(
+						"Web Page File (*.html)", "html");
+				opChooser.addChoosableFileFilter(filterHtml);
+				FileNameExtensionFilter filterPhp = new FileNameExtensionFilter(
+						"Web Page File (*.php)", "php");
+				opChooser.addChoosableFileFilter(filterPhp);
+				FileNameExtensionFilter filterLog = new FileNameExtensionFilter(
+						"Log File (*.log)", "log");
+				opChooser.addChoosableFileFilter(filterLog);
+				FileNameExtensionFilter filterPy = new FileNameExtensionFilter(
+						"Python File (*.py)", "py");
+				opChooser.addChoosableFileFilter(filterPy);
+				FileNameExtensionFilter filterJava = new FileNameExtensionFilter(
+						"Java File (*.java)", "java");
+				opChooser.addChoosableFileFilter(filterJava);
+				FileNameExtensionFilter filterJavaClass = new FileNameExtensionFilter(
+						"Java Class (*.class)", "class");
+				opChooser.addChoosableFileFilter(filterJavaClass);
+				FileNameExtensionFilter filterLua = new FileNameExtensionFilter(
+						"Lua File (*.lua)", "lua");
+				opChooser.addChoosableFileFilter(filterLua);
+				FileNameExtensionFilter filterBatch = new FileNameExtensionFilter(
+						"Batch File (*.bat)", "bat");
+				opChooser.addChoosableFileFilter(filterBatch);
+				FileNameExtensionFilter filterCmd = new FileNameExtensionFilter(
+						"Cmd File (*.cmd)", "cmd");
+				opChooser.addChoosableFileFilter(filterCmd);
+				FileNameExtensionFilter filterAs = new FileNameExtensionFilter(
+						"Flash Action Script (*.as)", "as");
+				opChooser.addChoosableFileFilter(filterAs);
 				int returnVal = opChooser.showOpenDialog(null);
 				File chosenFile = opChooser.getSelectedFile();
 
 				try {
 					if (returnVal == JFileChooser.APPROVE_OPTION) {
-						BufferedReader br = new BufferedReader(new FileReader(chosenFile));
+						BufferedReader br = new BufferedReader(new FileReader(
+								chosenFile));
 						String data;
 						while ((data = br.readLine()) != null) {
 							textArea.append(data + "\n");
@@ -432,7 +676,68 @@ public class Form extends JFrame {
 				} catch (IOException IOe) {
 					System.out.println("Error opening '" + chosenFile + "'");
 					Main.consoleText += "Error opening '" + chosenFile + "'";
-					JOptionPane.showMessageDialog(null, "Error opening '" + chosenFile + "'");
+					JOptionPane.showMessageDialog(null, "Error opening '"
+							+ chosenFile + "'");
+				}
+			}
+		});
+		mntmOpen_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JFileChooser opChooser = new JFileChooser();
+				FileNameExtensionFilter filterTxt = new FileNameExtensionFilter(
+						"Text File", "txt");
+				opChooser.setFileFilter(filterTxt);
+				FileNameExtensionFilter filterHtml = new FileNameExtensionFilter(
+						"Web Page File (*.html)", "html");
+				opChooser.addChoosableFileFilter(filterHtml);
+				FileNameExtensionFilter filterPhp = new FileNameExtensionFilter(
+						"Web Page File (*.php)", "php");
+				opChooser.addChoosableFileFilter(filterPhp);
+				FileNameExtensionFilter filterLog = new FileNameExtensionFilter(
+						"Log File (*.log)", "log");
+				opChooser.addChoosableFileFilter(filterLog);
+				FileNameExtensionFilter filterPy = new FileNameExtensionFilter(
+						"Python File (*.py)", "py");
+				opChooser.addChoosableFileFilter(filterPy);
+				FileNameExtensionFilter filterJava = new FileNameExtensionFilter(
+						"Java File (*.java)", "java");
+				opChooser.addChoosableFileFilter(filterJava);
+				FileNameExtensionFilter filterJavaClass = new FileNameExtensionFilter(
+						"Java Class (*.class)", "class");
+				opChooser.addChoosableFileFilter(filterJavaClass);
+				FileNameExtensionFilter filterLua = new FileNameExtensionFilter(
+						"Lua File (*.lua)", "lua");
+				opChooser.addChoosableFileFilter(filterLua);
+				FileNameExtensionFilter filterBatch = new FileNameExtensionFilter(
+						"Batch File (*.bat)", "bat");
+				opChooser.addChoosableFileFilter(filterBatch);
+				FileNameExtensionFilter filterCmd = new FileNameExtensionFilter(
+						"Cmd File (*.cmd)", "cmd");
+				opChooser.addChoosableFileFilter(filterCmd);
+				FileNameExtensionFilter filterAs = new FileNameExtensionFilter(
+						"Flash Action Script (*.as)", "as");
+				opChooser.addChoosableFileFilter(filterAs);
+				int returnVal = opChooser.showOpenDialog(null);
+				File chosenFile = opChooser.getSelectedFile();
+
+				try {
+					if (returnVal == JFileChooser.APPROVE_OPTION) {
+						BufferedReader br = new BufferedReader(new FileReader(
+								chosenFile));
+						String data;
+						while ((data = br.readLine()) != null) {
+							textArea.append(data + "\n");
+						}
+						br.close();
+					}
+					System.out.println("Opened '" + chosenFile + "'");
+					Main.consoleText += "Opened '" + chosenFile + "'";
+					setTitle(chosenFile + " - " + Main.title);
+				} catch (IOException IOe) {
+					System.out.println("Error opening '" + chosenFile + "'");
+					Main.consoleText += "Error opening '" + chosenFile + "'";
+					JOptionPane.showMessageDialog(null, "Error opening '"
+							+ chosenFile + "'");
 				}
 			}
 		});
@@ -440,8 +745,7 @@ public class Form extends JFrame {
 			public void windowGainedFocus(WindowEvent arg0) {
 				System.out.println("Welcome Back - 'windowGainedFocus'");
 				Main.consoleText += "Welcome Back - 'windowGainedFocus'\n";
-				textArea.setFont(new java.awt.Font(FontF.setFont,
-						java.awt.Font.PLAIN, FontF.setFontSize));
+				textArea.setFont(FontPicker.viewFont);
 			}
 
 			public void windowLostFocus(WindowEvent arg0) {
@@ -466,10 +770,10 @@ public class Form extends JFrame {
 					Main.consoleText += "Tool Bar Enabled" + "\n";
 					toolBar.setVisible(true);
 				}
-				
+
 			}
 		});
-		
+
 		mntmCut_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				ClipBoardData = textArea.getSelectedText();
@@ -493,12 +797,151 @@ public class Form extends JFrame {
 		});
 		mntmSave_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//save area
+				// save area
+			}
+		});
+		mntmNew_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Main.newPage();
+			}
+		});
+		mntmSaveAs_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser sdChooser = new JFileChooser();
+				FileNameExtensionFilter filterTxt = new FileNameExtensionFilter(
+						"Text File (*.txt)", "txt");
+				sdChooser.setFileFilter(filterTxt);
+				FileNameExtensionFilter filterHtml = new FileNameExtensionFilter(
+						"Web Page File (*.html)", "html");
+				sdChooser.addChoosableFileFilter(filterHtml);
+				FileNameExtensionFilter filterPhp = new FileNameExtensionFilter(
+						"Web Page File (*.php)", "php");
+				sdChooser.addChoosableFileFilter(filterPhp);
+				FileNameExtensionFilter filterLog = new FileNameExtensionFilter(
+						"Log File (*.log)", "log");
+				sdChooser.addChoosableFileFilter(filterLog);
+				FileNameExtensionFilter filterPy = new FileNameExtensionFilter(
+						"Python File (*.py)", "py");
+				sdChooser.addChoosableFileFilter(filterPy);
+				FileNameExtensionFilter filterJava = new FileNameExtensionFilter(
+						"Java File (*.java)", "java");
+				sdChooser.addChoosableFileFilter(filterJava);
+				FileNameExtensionFilter filterJavaClass = new FileNameExtensionFilter(
+						"Java Class (*.class)", "class");
+				sdChooser.addChoosableFileFilter(filterJavaClass);
+				FileNameExtensionFilter filterLua = new FileNameExtensionFilter(
+						"Lua File (*.lua)", "lua");
+				sdChooser.addChoosableFileFilter(filterLua);
+				FileNameExtensionFilter filterBatch = new FileNameExtensionFilter(
+						"Batch File (*.bat)", "bat");
+				sdChooser.addChoosableFileFilter(filterBatch);
+				FileNameExtensionFilter filterCmd = new FileNameExtensionFilter(
+						"Cmd File (*.cmd)", "cmd");
+				sdChooser.addChoosableFileFilter(filterCmd);
+				FileNameExtensionFilter filterAs = new FileNameExtensionFilter(
+						"Flash Action Script (*.as)", "as");
+				sdChooser.addChoosableFileFilter(filterAs);
+
+				int returnVal = sdChooser.showSaveDialog(null);
+
+				String locationF = "";
+
+				try {
+					if (returnVal == JFileChooser.APPROVE_OPTION) {
+						File directory = sdChooser.getCurrentDirectory();
+						String path = directory.getAbsolutePath();
+						String fileName = sdChooser.getSelectedFile().getName();
+						FileFilter cFilter = sdChooser.getFileFilter();
+						if (cFilter == filterTxt) {
+							if (!fileName.contains(".txt")) {
+								fileName += ".txt";
+							}
+						}
+						if (cFilter == filterHtml) {
+							if (!fileName.contains(".html")) {
+								fileName += ".html";
+							}
+						}
+						if (cFilter == filterTxt) {
+							if (!fileName.contains(".txt")) {
+								fileName += ".txt";
+							}
+						}
+						if (cFilter == filterPhp) {
+							if (!fileName.contains(".php")) {
+								fileName += ".php";
+							}
+						}
+						if (cFilter == filterLog) {
+							if (!fileName.contains(".log")) {
+								fileName += ".log";
+							}
+						}
+						if (cFilter == filterPy) {
+							if (!fileName.contains(".py")) {
+								fileName += ".py";
+							}
+						}
+						if (cFilter == filterJava) {
+							if (!fileName.contains(".java")) {
+								fileName += ".java";
+							}
+						}
+						if (cFilter == filterJavaClass) {
+							if (!fileName.contains(".class")) {
+								fileName += ".class";
+							}
+						}
+						if (cFilter == filterLua) {
+							if (!fileName.contains(".lua")) {
+								fileName += ".lua";
+							}
+						}
+						if (cFilter == filterBatch) {
+							if (!fileName.contains(".bat")) {
+								fileName += ".bat";
+							}
+						}
+						if (cFilter == filterCmd) {
+							if (!fileName.contains(".cmd")) {
+								fileName += ".cmd";
+							}
+						}
+						if (cFilter == filterAs) {
+							if (!fileName.contains(".as")) {
+								fileName += ".as";
+							}
+						}
+						locationF = path + "\\" + fileName;
+						BufferedWriter bw = new BufferedWriter(
+								new OutputStreamWriter(new FileOutputStream(
+										locationF), "UTF-8"));
+						bw.write(textArea.getText());
+						bw.close();
+						System.out.println("Saved '" + locationF + "'");
+						Main.consoleText += "Saved '" + locationF + "'\n";
+						setTitle(locationF + " - " + Main.title);
+
+					}
+				} catch (IOException IOe2) {
+					System.out.println("Error trying to save this to '"
+							+ locationF + "':");
+					System.out.println(textArea.getText());
+					Main.consoleText += "Error trying to save this to '"
+							+ locationF + "':\n";
+					Main.consoleText += textArea.getText() + "\n";
+				}
+
 			}
 		});
 		mntmPaste_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				textArea.append(ClipBoardData);
+			}
+		});
+		mntmTimeDate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {				
+				textArea.append(Main.timeDate);
 			}
 		});
 		if (wrap.exists()) {

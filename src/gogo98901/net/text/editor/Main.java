@@ -1,11 +1,16 @@
 package gogo98901.net.text.editor;
 
 import gogo98901.net.text.editor.open.Console;
+import gogo98901.net.text.editor.open.FontPicker;
 
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -30,10 +35,12 @@ public class Main implements WindowListener {
 	public static String ConsoleImage = "res/console.png";
 	public static String FontImage = "res/font.png";
 	public static String ConsoleIconImage = "res/consoleIcon.png";
+	public static String TimeDateImage = "res/td.png";
 	public static String errorI = "There are no current errors";
 	public static String systemName = System.getProperty("os.name");
 	public static String systemversion = System.getProperty("os.version");
 	public static String appVersion = "0.9";
+	public static String consoleText = "";
 
 	static File icon = new File(IconImage);
 	static File cross = new File(CrossImage);
@@ -53,18 +60,27 @@ public class Main implements WindowListener {
 	static File consoleI = new File(ConsoleImage);
 	static File consoleIcon = new File(ConsoleIconImage);
 	static File font = new File(FontImage);
+	static File timeDateIcon = new File(TimeDateImage);
 
 	static ImageIcon newIcon = new ImageIcon(NewImage);
 
 	public static boolean running = false;
 	public static boolean errorT = false;
 
-	public static String consoleText = "";
+	public static int openWindows = 0;
+
+	public static Form GUI = new Form();
 	
+	public static DateFormat dateTimeFormat = new SimpleDateFormat("mm:HH dd/MM/yyyy");
+	public static Date dateTime = new Date();
+	public static String timeDate = dateTimeFormat.format(dateTime);
+
 	public static void main(String[] args) {
 		running = true;
-		System.out.println("Starting " + title + "\nApp Version '" + appVersion + "'");
-		consoleText += "Starting " + title + "\nApp Version '" + appVersion + "'" + "\n";
+		System.out.println("Starting " + title + "\nApp Version '" + appVersion
+				+ "'");
+		consoleText += "Starting " + title + "\nApp Version '" + appVersion
+				+ "'" + "\n";
 		System.out.println("Operrating System : " + systemName + "| Version : "
 				+ systemversion);
 		consoleText += "Operrating System : " + systemName + "| Version : "
@@ -78,20 +94,22 @@ public class Main implements WindowListener {
 		} else {
 			System.out.println("There are no Errors");
 		}
-		Form GUI = new Form();
 		GUI.setVisible(true);
 		GUI.setIconImage(Toolkit.getDefaultToolkit().getImage(IconImage));
 		GUI.setName("JText by GOGO98901, Produced by SystemDragon");
 		GUI.setTitle(title);
-
+		FontPicker.preFont();
+		openWindows++;
 	}
 
 	public static void newPage() {
+
 		Form GUI = new Form();
 		GUI.setVisible(true);
 		GUI.setIconImage(Toolkit.getDefaultToolkit().getImage(IconImage));
 		GUI.setName("JText by GOGO98901, Produced by SystemDragon");
 		GUI.setTitle(title);
+		openWindows++;
 
 	}
 
@@ -151,7 +169,7 @@ public class Main implements WindowListener {
 			errorI = PasteImage;
 			error();
 		}
-		
+
 		if (!selectAll.exists()) {
 			errorI = SelectAllImage;
 			error();
@@ -183,6 +201,10 @@ public class Main implements WindowListener {
 			errorI = FontImage;
 			error();
 		}
+		if (!timeDateIcon.exists()) {
+			errorI = TimeDateImage;
+			error();
+		}
 	}
 
 	public static void error() {
@@ -198,20 +220,34 @@ public class Main implements WindowListener {
 					0);
 			System.out.println("There are no current errors");
 			consoleText += "There are no current errors" + "\n";
-			
 
 		}
 	}
 
 	public static void exit() {
-		int result = JOptionPane.showConfirmDialog(null, "Are you sure?",
-				title, JOptionPane.YES_NO_OPTION,
-				JOptionPane.QUESTION_MESSAGE);
-		if (result == JOptionPane.YES_OPTION) {
-			System.out.println("Exiting");
-			consoleText += "Exiting" + "\n";
-			Console.logConsole();
-			System.exit(3);
+		if (openWindows != 1) {
+			int result = JOptionPane.showConfirmDialog(null, "Are you sure?",
+					title, JOptionPane.YES_NO_OPTION,
+					JOptionPane.QUESTION_MESSAGE);
+			if (result == JOptionPane.YES_OPTION) {
+				Console.logConsole();
+				System.out.println("Exiting");
+				consoleText += "Exiting" + "\n";
+				GUI.dispose();
+				GUI.setVisible(false);
+				openWindows --;
+			}
+		} else if(openWindows <= 1){
+			int result = JOptionPane.showConfirmDialog(null, "Are you sure?",
+					title, JOptionPane.YES_NO_OPTION,
+					JOptionPane.QUESTION_MESSAGE);
+			if (result == JOptionPane.YES_OPTION) {
+				Console.logConsole();
+				System.out.println("Exiting");
+				consoleText += "Exiting" + "\n";
+				GUI.dispose();
+				System.exit(0);
+			}
 		}
 	}
 
@@ -220,22 +256,39 @@ public class Main implements WindowListener {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception e) {
 			System.out.println("Error ---> " + e);
+			consoleText += "Error ---> " + e + "\n";
 		}
 	}
+
 	@Override
 	public void windowClosing(WindowEvent e) {
+		System.out.println("Window Closing");
 		exit();
 	}
+
 	@Override
-	public void windowActivated(WindowEvent e) {}
+	public void windowActivated(WindowEvent e) {
+		System.out.println("Window Activated");
+	}
+
 	@Override
-	public void windowClosed(WindowEvent e) {}
+	public void windowClosed(WindowEvent e) {
+		System.out.println("Window Closed");
+	}
+
 	@Override
-	public void windowDeactivated(WindowEvent e) {}
+	public void windowDeactivated(WindowEvent e) {
+	}
+
 	@Override
-	public void windowDeiconified(WindowEvent e) {}
+	public void windowDeiconified(WindowEvent e) {
+	}
+
 	@Override
-	public void windowIconified(WindowEvent e) {}
+	public void windowIconified(WindowEvent e) {
+	}
+
 	@Override
-	public void windowOpened(WindowEvent e) {}
+	public void windowOpened(WindowEvent e) {
+	}
 }

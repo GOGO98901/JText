@@ -18,10 +18,19 @@ import java.beans.PropertyChangeEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.beans.VetoableChangeListener;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.awt.event.WindowStateListener;
 import java.awt.event.WindowEvent;
 import java.awt.Dialog.ModalExclusionType;
 import javax.swing.JTextPane;
+import java.awt.event.WindowFocusListener;
 
 public class Console extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -101,6 +110,14 @@ public class Console extends JFrame {
 				ConsoleTextArea.setText(Main.consoleText);
 			}
 		});
+		addWindowFocusListener(new WindowFocusListener() {
+			public void windowGainedFocus(WindowEvent arg0) {
+				ConsoleTextArea.setText(Main.consoleText);
+			}
+			public void windowLostFocus(WindowEvent arg0) {
+				ConsoleTextArea.setText(Main.consoleText);
+			}
+		});
 		ConsoleTextArea.setEditable(false);
 		ConsoleTextArea.setFont(new Font("Monospaced", Font.PLAIN, 11));
 		ConsoleTextArea.setForeground(Color.WHITE);
@@ -123,6 +140,22 @@ addWindowStateListener(new WindowStateListener() {
 		}
 	}
 	public static void logConsole(){
+		DateFormat dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy mm:HH");
+		Date date1 = new Date();
+		String timeDate = dateTimeFormat.format(date1);
+		DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy ss-mm-HH");
+		Date date2 = new Date();
+		String date = dateFormat.format(date2);
+		String location = "log/JText.log " + date + ".txt";
+		File locationf = new File(location);
+		System.out.println("Saving log :" + locationf.getAbsolutePath());
+		try {
+			BufferedWriter bw = new BufferedWriter(
+					new OutputStreamWriter(new FileOutputStream(
+							location)));
+		bw.write("JText Log :: " + timeDate + " ::" + Main.consoleText);
+		bw.close();
+		} catch (IOException ioe){ioe.getMessage();}
 		
 	}
 	
