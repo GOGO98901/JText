@@ -90,6 +90,8 @@ public class Console extends JFrame {
 		contentPane.add(scrollPane, BorderLayout.CENTER);
 
 		final JTextArea ConsoleTextArea = new JTextArea();
+		ConsoleTextArea.setLineWrap(true);
+		ConsoleTextArea.setWrapStyleWord(true);
 		ConsoleTextArea.addVetoableChangeListener(new VetoableChangeListener() {
 			public void vetoableChange(PropertyChangeEvent arg0) {
 				ConsoleTextArea.setText(Main.consoleText);

@@ -1,5 +1,6 @@
 package gogo98901.net.text.editor.open;
 
+import gogo98901.net.text.editor.Form;
 import gogo98901.net.text.editor.Main;
 
 import java.awt.Font;
@@ -21,9 +22,9 @@ public class FontPicker {
 	public static int data2Int;
 	public static int data3Int;
 
-	public static String setFont;
-	public static int setFontStyle;
-	public static int setFontSize;
+	public static String setFont = "";
+	public static int setFontStyle = 0;
+	public static int setFontSize = 12;
 
 	public static boolean okReturn = false;
 
@@ -46,8 +47,7 @@ public class FontPicker {
 						new FileOutputStream(fontTxt), "UTF-8"));
 				bw.write(setFont + "\n" + setFontStyle + "\n" + setFontStyle);
 				bw.close();
-				viewFont = new java.awt.Font(setFont, setFontStyle,
-						setFontSize);
+				viewFont = new java.awt.Font(setFont, setFontStyle, setFontSize);
 			} catch (IOException ioe) {
 			}
 		} else {
@@ -60,39 +60,46 @@ public class FontPicker {
 	}
 
 	public static void preFont() {
-		if (fontTxt.exists()) {
-			try {
-				BufferedReader br = new BufferedReader(new FileReader(fontTxt));
-				String data;
-				while ((data = br.readLine()) != null) {
-					dataCheck = data;
-				}
-				br.close();
-			} catch (IOException ioe) {
-			}
-			try {
-				BufferedReader br = new BufferedReader(new FileReader(fontTxt));
-				for (int i = 0; i < 2; i++)
-					;
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(fontTxt));
+			System.out.println("Reading Font from File:");
+			Main.consoleText += "Reading Font from File:\n";
+			for (int i = 0; i < 1; i++) {
 				data1 = br.readLine();
-				for (int i = 1; i < 3; i++)
-					;
-				data2 = br.readLine();
-				for (int i = 2; i < 4; i++)
-					;
-				data3 = br.readLine();
-				br.close();
-				data2Int = Integer.parseInt(data2);
-				data2Int = setFontStyle;
-				data3Int = Integer.parseInt(data3);
-				data3Int = setFontSize;
-				
-				viewFont = new java.awt.Font(setFont, setFontStyle,
-						setFontSize);
-			} catch (IOException ioe) {
-				System.out.println("Error Finding previous Font");
+				System.out.println("--Font Name = '" + data1 + "'");
+				Main.consoleText += "--Font Name = '" + data1 + "'\n";
 			}
-		} else {
+			for (int i = 1; i < 2; i++) {
+				data2 = br.readLine();
+				System.out.println("--Font Style = '" + data2 + "'");
+				Main.consoleText += "--Font Style = '" + data2 + "'\n";
+			}
+			for (int i = 2; i < 3; i++) {
+				data3 = br.readLine();
+				System.out.println("--Font Size = '" + data3 + "'");
+				Main.consoleText += "--Font Size = '" + data3 + "'\n";
+			}
+
+			br.close();
+			setFont = data1;
+			data2Int = Integer.parseInt(data2);
+			setFontStyle = data2Int;
+			data3Int = Integer.parseInt(data3);
+			setFontSize = data3Int;
+			System.out.println("Set Font to '" + setFont + "' With a size of '"
+					+ setFontSize + "' And a style int of '" + setFontStyle + "'");
+			Main.consoleText += "Set Font to '" + setFont + "' With a size of '"
+					+ setFontSize + "' And a style int of '" + setFontStyle + "'\n";
+			viewFont = new java.awt.Font(setFont, setFontStyle, setFontSize);
+			Form.textArea.setFont(viewFont);
+		} catch (IOException ioe) {
+			System.out.println("Error Finding previous Font");
+			ioe.printStackTrace();
+			defult();
+		}
+		if (setFont == null) {
+
+			System.out.println("ERROR --- SetFont is null");
 			defult();
 		}
 	}

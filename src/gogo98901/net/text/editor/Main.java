@@ -67,11 +67,10 @@ public class Main implements WindowListener {
 	public static boolean running = false;
 	public static boolean errorT = false;
 
-	public static int openWindows = 0;
-
 	public static Form GUI = new Form();
-	
-	public static DateFormat dateTimeFormat = new SimpleDateFormat("mm:HH dd/MM/yyyy");
+
+	public static DateFormat dateTimeFormat = new SimpleDateFormat(
+			"mm:HH dd/MM/yyyy");
 	public static Date dateTime = new Date();
 	public static String timeDate = dateTimeFormat.format(dateTime);
 
@@ -99,18 +98,6 @@ public class Main implements WindowListener {
 		GUI.setName("JText by GOGO98901, Produced by SystemDragon");
 		GUI.setTitle(title);
 		FontPicker.preFont();
-		openWindows++;
-	}
-
-	public static void newPage() {
-
-		Form GUI = new Form();
-		GUI.setVisible(true);
-		GUI.setIconImage(Toolkit.getDefaultToolkit().getImage(IconImage));
-		GUI.setName("JText by GOGO98901, Produced by SystemDragon");
-		GUI.setTitle(title);
-		openWindows++;
-
 	}
 
 	public static void Images() {
@@ -225,30 +212,17 @@ public class Main implements WindowListener {
 	}
 
 	public static void exit() {
-		if (openWindows != 1) {
-			int result = JOptionPane.showConfirmDialog(null, "Are you sure?",
-					title, JOptionPane.YES_NO_OPTION,
-					JOptionPane.QUESTION_MESSAGE);
-			if (result == JOptionPane.YES_OPTION) {
-				Console.logConsole();
-				System.out.println("Exiting");
-				consoleText += "Exiting" + "\n";
-				GUI.dispose();
-				GUI.setVisible(false);
-				openWindows --;
-			}
-		} else if(openWindows <= 1){
-			int result = JOptionPane.showConfirmDialog(null, "Are you sure?",
-					title, JOptionPane.YES_NO_OPTION,
-					JOptionPane.QUESTION_MESSAGE);
-			if (result == JOptionPane.YES_OPTION) {
-				Console.logConsole();
-				System.out.println("Exiting");
-				consoleText += "Exiting" + "\n";
-				GUI.dispose();
-				System.exit(0);
-			}
+
+		int result = JOptionPane.showConfirmDialog(null, "Are you sure?",
+				title, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+		if (result == JOptionPane.YES_OPTION) {
+			Console.logConsole();
+			System.out.println("Exiting");
+			consoleText += "Exiting" + "\n";
+			GUI.dispose();
+			GUI.setVisible(false);
 		}
+
 	}
 
 	public static void lookAndFeel() {

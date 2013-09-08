@@ -52,6 +52,8 @@ public class Form extends JFrame {
 	private static final long serialVersionUID = 1L;
 
 	public static String ClipBoardData = "";
+	
+	public static final JTextArea textArea = new JTextArea();
 
 	private JPanel contentPane;
 
@@ -101,13 +103,6 @@ public class Form extends JFrame {
 		menuBar.add(mnFile);
 
 		JMenuItem mntmNew = new JMenuItem("New");
-		mntmNew.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Main.newPage();
-				System.out.println("Starting New");
-				Main.consoleText += "Starting New" + "\n";
-			}
-		});
 		mntmNew.setFont(new Font("Arial", Font.PLAIN, 13));
 		mntmNew.setIcon(new ImageIcon(Main.NewImage));
 		mntmNew.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N,
@@ -403,7 +398,7 @@ public class Form extends JFrame {
 		JScrollPane scrollPane = new JScrollPane();
 		contentPane.add(scrollPane, BorderLayout.CENTER);
 		
-		final JTextArea textArea = new JTextArea();
+		
 		textArea.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		textArea.setCaretColor(Color.BLACK);
 		textArea.setBackground(Color.WHITE);
@@ -800,9 +795,19 @@ public class Form extends JFrame {
 				// save area
 			}
 		});
+
+		mntmNew.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				textArea.setText("");
+				System.out.println("Starting New");
+				Main.consoleText += "Starting New" + "\n";
+			}
+		});
 		mntmNew_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Main.newPage();
+				textArea.setText("");
+				System.out.println("Starting New");
+				Main.consoleText += "Starting New" + "\n";
 			}
 		});
 		mntmSaveAs_1.addActionListener(new ActionListener() {
