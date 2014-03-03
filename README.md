@@ -1,6 +1,8 @@
-JText [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/GOGO98901/jtext/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+JText
 =====
 
-JText a Simple Text Editor I made
+JText a Simple Text Editor made by [Rory CLaasen](http://github.com/gogo98901)
+The program is slow and is optimised for windows 8, othe os can make the textures go weird
+the application is tested on windows 7 and 8
 
 
